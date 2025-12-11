@@ -1,0 +1,5 @@
+{
+  "name": "Enterprise Minimal Commerce",
+  "description": "Enterprise-grade E-commerce system with Microservices architecture. Minimal Free UI style (Vercel/Linear inspired). Includes Admin Dashboard, Mobile App logic, and K8s configurations.",
+  "requestFramePermissions": []
+}
