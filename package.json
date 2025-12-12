@@ -1,5 +1,5 @@
 {
-  "name": "enterprise-minimal-commerce",
+  "name": "eflyer-commerce",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,16 +8,37 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "resolutions": {
+    "**/react": "^19.2.1",
+    "**/react-dom": "^19.2.1"
+  },
+  "overrides": {
+    "lucide-react": {
+      "react": "^19.2.1",
+      "react-dom": "^19.2.1"
+    }
+  },
   "dependencies": {
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "lucide-react": "^0.559.0",
-    "recharts": "^3.5.1"
+    "clsx": "^2.1.0",
+    "framer-motion": "^11.0.8",
+    "lucide-react": "^0.358.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.0",
+    "react-router-dom": "^6.22.3",
+    "recharts": "^2.12.2",
+    "tailwind-merge": "^2.2.1",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "@types/node": "^20.11.24",
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.18",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.1.4"
   }
 }

@@ -1,4 +1,4 @@
-import { Product, Order, User, Role, OrderStatus } from '../types';
+import { Product, Order, User, Role, OrderStatus, AnalyticsData, PaymentStatus } from '../types';
 import { MOCK_PRODUCTS, MOCK_ORDERS } from '../constants';
 
 // A simple service to mimic API calls and Database persistence using LocalStorage
@@ -7,7 +7,7 @@ class MockBackendService {
   private ordersKey = 'eflyer_orders';
   private userKey = 'eflyer_user';
   private usersListKey = 'eflyer_users_list';
-  private authKey = 'eflyer_auth_db'; // New key for storing credentials securely (mock)
+  private authKey = 'eflyer_auth_db'; 
 
   constructor() {
     this.initialize();
@@ -25,20 +25,24 @@ class MockBackendService {
     // Initialize Users
     if (!localStorage.getItem(this.usersListKey)) {
       const mockUsers: User[] = [
-        { id: 'u1', name: 'John Doe', email: 'john@example.com', role: Role.CUSTOMER, isActive: true, joinedAt: '2023-01-15' },
-        { id: 'u2', name: 'Jane Smith', email: 'jane@example.com', role: Role.EMPLOYEE, isActive: true, joinedAt: '2023-02-20' },
-        { id: 'u3', name: 'Alice Johnson', email: 'alice@example.com', role: Role.CUSTOMER, isActive: false, joinedAt: '2023-03-10' },
+        { id: 'u1', name: 'John Doe', email: 'john@example.com', role: Role.CUSTOMER, isActive: true, createdAt: '2023-01-15' },
+        { id: 'u2', name: 'Jane Smith', email: 'jane@example.com', role: Role.EMPLOYEE, isActive: true, createdAt: '2023-02-20' },
+        { id: 'u3', name: 'Alice Johnson', email: 'alice@example.com', role: Role.CUSTOMER, isActive: false, createdAt: '2023-03-10' },
+        { id: 'u4', name: 'Support Agent', email: 'support@eflyer.com', role: Role.SUPPORT, isActive: true, createdAt: '2023-01-10' },
+        { id: 'u5', name: 'Store Manager', email: 'manager@eflyer.com', role: Role.MANAGER, isActive: true, createdAt: '2023-01-05' },
       ];
       localStorage.setItem(this.usersListKey, JSON.stringify(mockUsers));
     }
 
-    // Initialize Auth DB (Passwords)
+    // Initialize Auth DB
     if (!localStorage.getItem(this.authKey)) {
       const initialAuth = {
         'admin@eflyer.com': 'admin',
         'john@example.com': 'password',
         'jane@example.com': 'password',
-        'alice@example.com': 'password'
+        'alice@example.com': 'password',
+        'support@eflyer.com': 'password',
+        'manager@eflyer.com': 'password'
       };
       localStorage.setItem(this.authKey, JSON.stringify(initialAuth));
     }
@@ -56,12 +60,9 @@ class MockBackendService {
   // --- Auth ---
   async login(email: string, password: string): Promise<{ user: User, token: string }> {
     return new Promise(async (resolve, reject) => {
-      // Delay validation to simulate network
       await new Promise(r => setTimeout(r, 800));
 
-      // 1. Check if user exists in our "DB"
       const users = await this.getUsers();
-      // Also check if it's the super admin (who might not be in the users list depending on init state, but let's treat him as special)
       let foundUser = users.find(u => u.email === email);
       
       if (!foundUser && email === 'admin@eflyer.com') {
@@ -69,9 +70,9 @@ class MockBackendService {
           id: 'admin1',
           name: 'Super Admin',
           email,
-          role: Role.ADMIN,
+          role: Role.SUPER_ADMIN,
           isActive: true,
-          joinedAt: new Date().toISOString()
+          createdAt: new Date().toISOString()
         };
       }
 
@@ -85,29 +86,24 @@ class MockBackendService {
         return;
       }
 
-      // 2. Validate Password
       const authDB = this.getAuthDB();
       const storedPassword = authDB[email];
 
-      // If no password stored (legacy data), or password mismatch
       if (!storedPassword || storedPassword !== password) {
         reject('Incorrect password');
         return;
       }
 
-      // Success
       localStorage.setItem(this.userKey, JSON.stringify(foundUser));
       resolve({ user: foundUser, token: `mock-jwt-token-${foundUser.id}` });
     });
   }
 
   async register(name: string, email: string, password: string): Promise<{ user: User, token: string }> {
-    // Delay validation
     await new Promise(r => setTimeout(r, 800));
 
     const users = await this.getUsers();
     
-    // Check duplication
     if (users.find(u => u.email === email) || email === 'admin@eflyer.com') {
       throw new Error('Email already exists');
     }
@@ -116,21 +112,18 @@ class MockBackendService {
       id: `u-${Date.now()}`,
       name,
       email,
-      role: Role.CUSTOMER, // Default role is Customer
+      role: Role.CUSTOMER, 
       isActive: true,
-      joinedAt: new Date().toISOString()
+      createdAt: new Date().toISOString()
     };
 
-    // Save User
     users.push(newUser);
     localStorage.setItem(this.usersListKey, JSON.stringify(users));
     
-    // Save Password
     const authDB = this.getAuthDB();
     authDB[email] = password;
     this.saveAuthDB(authDB);
     
-    // Auto login after register
     localStorage.setItem(this.userKey, JSON.stringify(newUser));
     return { user: newUser, token: `mock-jwt-token-${newUser.id}` };
   }
@@ -175,16 +168,29 @@ class MockBackendService {
     localStorage.setItem(this.productsKey, JSON.stringify(products));
   }
 
-  // --- Orders ---
+  // --- Orders & Payments ---
   async getOrders(): Promise<Order[]> {
     const data = localStorage.getItem(this.ordersKey);
     return data ? JSON.parse(data) : [];
   }
 
+  async processPayment(amount: number, method: 'stripe' | 'paypal' | 'credit_card'): Promise<{ success: boolean, transactionId: string }> {
+    // Simulate Payment Gateway Delay
+    const delay = method === 'stripe' ? 2500 : 1500;
+    await new Promise(r => setTimeout(r, delay));
+    
+    // Random failure for testing (5% chance)
+    if (Math.random() < 0.05) {
+      throw new Error("Payment declined by bank.");
+    }
+
+    return { success: true, transactionId: `txn_${Date.now()}_${method}` };
+  }
+
   async createOrder(orderData: Partial<Order>): Promise<Order> {
     const products = await this.getProducts();
     
-    // 1. Check Inventory Logic
+    // Check Inventory
     if (orderData.items && orderData.items.length > 0) {
       for (const item of orderData.items) {
         const productIndex = products.findIndex(p => p.id === item.productId);
@@ -193,11 +199,8 @@ class MockBackendService {
         if (products[productIndex].stock < item.quantity) {
           throw new Error(`Insufficient stock for ${item.productName}. Available: ${products[productIndex].stock}`);
         }
-        
-        // Deduct Stock
         products[productIndex].stock -= item.quantity;
       }
-      // Save updated inventory
       localStorage.setItem(this.productsKey, JSON.stringify(products));
     }
 
@@ -208,15 +211,14 @@ class MockBackendService {
       customerName: 'Guest Customer',
       totalAmount: 0,
       status: OrderStatus.PENDING,
+      paymentStatus: PaymentStatus.UNPAID,
+      paymentMethod: 'credit_card',
       items: [],
       createdAt: new Date().toISOString(),
       ...orderData
     };
     
-    // Simulate slight delay
-    await new Promise(r => setTimeout(r, 500));
-    
-    orders.unshift(newOrder); // Add to beginning
+    orders.unshift(newOrder); 
     localStorage.setItem(this.ordersKey, JSON.stringify(orders));
     return newOrder;
   }
@@ -255,6 +257,22 @@ class MockBackendService {
     users[index].role = role;
     localStorage.setItem(this.usersListKey, JSON.stringify(users));
     return users[index];
+  }
+
+  // --- Analytics (Mock) ---
+  async getAnalyticsData(): Promise<any> {
+    await new Promise(r => setTimeout(r, 500));
+    return {
+      revenue: [1200, 1900, 3000, 5000, 4500, 6000, 7500],
+      orders: [50, 75, 120, 160, 140, 200, 250],
+      visitors: [500, 800, 1200, 1500, 1300, 2000, 2200],
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      topProducts: [
+        { name: 'Summer Yellow Tee', sales: 120 },
+        { name: 'Pro Gaming PC', sales: 85 },
+        { name: 'Gold Drop Earrings', sales: 70 },
+      ]
+    };
   }
 }
 

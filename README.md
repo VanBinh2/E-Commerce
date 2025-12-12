@@ -1,191 +1,172 @@
-# Minimal Free Dashboard (PRO + ENTERPRISE)
+# E-Commerce Enterprise Platform
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![React](https://img.shields.io/badge/react-18.x-61dafb.svg)
+![TypeScript](https://img.shields.io/badge/typescript-5.x-blue.svg)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-3.x-38bdf8.svg)
-![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248.svg)
 
-A high-performance, enterprise-grade SaaS Dashboard built with a **Minimal Free** design philosophy. This application combines a clean, whitespace-driven interface (inspired by Vercel/Linear) with powerful backend logic, designed for scalability from startups to large organizations.
+Giải pháp Thương mại điện tử Doanh nghiệp toàn diện với giao diện khách hàng hiệu suất cao, hệ thống quản trị CMS mạnh mẽ, thông báo thời gian thực và xử lý thanh toán mô phỏng. Được xây dựng bằng các công nghệ web hiện đại để tối ưu hiệu suất và khả năng mở rộng.
+
+## 📋 Yêu cầu hệ thống
+
+- Node.js 16.x hoặc cao hơn
+- npm 8.x hoặc cao hơn
+- Git
+
+## 🚀 Bắt đầu nhanh
+
+### 1. Cài đặt dự án
+
+```bash
+# Clone dự án
+git clone [đường-dẫn-đến-repository]
+
+# Di chuyển vào thư mục dự án
+cd e-commerce
+
+# Cài đặt các dependencies
+npm install --legacy-peer-deps
+```
+
+### 2. Chạy dự án
+
+```bash
+# Khởi động chế độ phát triển
+npm run dev
+
+# Build cho production
+npm run build
+
+# Xem trước bản build
+npm run preview
+```
+
+### 3. Truy cập ứng dụng
+
+- Ứng dụng sẽ chạy tại: [http://localhost:5173](http://localhost:5173)
+- Trang quản trị: [http://localhost:5173/admin](http://localhost:5173/admin)
+
+## 🔧 Xử lý sự cố
+
+Nếu gặp lỗi về phiên bản package, hãy thử:
+
+```bash
+# Xóa node_modules và package-lock.json
+rm -r -force node_modules
+rm package-lock.json
+
+# Cài đặt lại dependencies
+npm install --legacy-peer-deps
+```
+
+## 🛠 Công nghệ sử dụng
+
+- **Frontend:** React 18, Vite, TypeScript
+- **Styling:** Tailwind CSS, Framer Motion, Lucide Icons
+- **Quản lý state:** Zustand
+- **Form:** React Hook Form
+- **Biểu đồ:** Recharts
+- **Định tuyến:** React Router v6
+
+## 📝 Ghi chú phát triển
+
+- Luôn chạy `npm run lint` trước khi commit code
+- Tuân thủ quy ước đặt tên và cấu trúc thư mục
+- Viết test cho các component và hàm mới
+
+## 📄 Giấy phép
+
+Dự án này được cấp phép theo giấy phép MIT - xem file [LICENSE](LICENSE) để biết thêm chi tiết.
+
+## 🙏 Cảm ơn
+
+Cảm ơn bạn đã quan tâm đến dự án này! Nếu bạn thấy dự án hữu ích, hãy cho một ⭐ trên GitHub.
 
 ---
 
-## 📑 Table of Contents
+## 🚀 Tính năng chính
 
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Preview](#-preview)
-- [Architecture & Database](#-architecture--database)
-- [Getting Started](#-getting-started)
-- [Environment Configuration](#-environment-configuration)
-- [Project Structure](#-project-structure)
-- [Roadmap](#-roadmap)
-- [License](#-license)
+### 🛍️ Customer Storefront (Premium UX)
+*   **Advanced Filtering:** Filter products by Price Range, Category, and Search.
+*   **Smart Cart:** Persistent cart state (localStorage) with slide-out drawer.
+*   **Multi-Step Checkout:** Seamless flow from Shipping -> Payment -> Confirmation.
+*   **Payment Simulation:** Mock integration for Credit Card (Stripe-like) flows.
+*   **Responsive Design:** Mobile-first architecture using Tailwind CSS.
 
----
+### 💼 Admin CMS (Enterprise)
+*   **Dashboard Analytics:** Revenue charts, Sales trends, and Visitor stats using `Recharts`.
+*   **Product Management:** Full CRUD (Create, Read, Update, Delete) with Modal forms.
+*   **Data Tables:** Clean, paginated views for inventory management.
+*   **Role-Based Access:** Protected routes ensuring only Admins can access the CMS.
 
-## 🚀 Features
-
-### Core (Standard)
-*   **Dashboard Analytics:** Interactive widgets for sales, revenue, and user growth.
-*   **Project Management:** CRUD operations for projects with status tracking.
-*   **Task Management:** Switchable views (Table / Kanban Board) for task handling.
-*   **User Management:** Basic user profiles and directory.
-*   **Clean UI:** Responsive design using TailwindCSS and Lucide Icons.
-
-### 💎 PRO Features
-*   **Real-time Updates:** Socket-based updates for task movements and notifications.
-*   **Multi-role Access:** Granular control for Admin, Employee, and Customer roles.
-*   **Advanced UX:** Skeletal loading states, smooth transitions (`fade-in`), and toast notifications.
-*   **Data Export:** Export reports to CSV/PDF formats.
-
-### 🏢 ENTERPRISE Features
-*   **Audit Logging:** Complete history of user actions and system changes.
-*   **System Health:** Real-time monitoring of API latency and server status.
-*   **Permissions Matrix:** Complex role-based access control (RBAC) visualization.
-*   **Queue Monitoring:** Visualizing background job processing status.
+### ⚡ Real-Time & Systems
+*   **Notification Engine:** Global Toast system for alerts (Success, Error, Info).
+*   **Event Simulation:** Simulates "Live" orders coming in every 30s to demonstrate WebSocket capabilities.
+*   **State Management:** Powered by `Zustand` for atomic, performance-optimized state.
 
 ---
 
 ## 🛠 Tech Stack
 
-*   **Frontend:** React 18 / Next.js
-*   **Styling:** TailwindCSS, Shadcn UI (Concepts), Lucide React
-*   **Charts:** Recharts
-*   **Backend:** Node.js, Express (Rest API)
-*   **Database:** MongoDB Atlas
-*   **State Management:** React Hooks / Context / Redux (Optional)
+| Domain | Technology |
+| :--- | :--- |
+| **Frontend** | React 18, Vite, TypeScript |
+| **Styling** | Tailwind CSS, Framer Motion, Lucide Icons |
+| **State** | Zustand (Persist Middleware) |
+| **Forms** | React Hook Form |
+| **Charts** | Recharts |
+| **Routing** | React Router v6 |
+| **Backend (Mock)** | LocalStorage Service Layer (Simulating REST API) |
 
 ---
 
-## 📸 Preview
+## 📦 Project Structure
 
-*(Place your screenshots here)*
-
-| Dashboard | Kanban Board |
-|:---:|:---:|
-| ![Dashboard Placeholder](https://placehold.co/600x400?text=Dashboard+Preview) | ![Kanban Placeholder](https://placehold.co/600x400?text=Kanban+Preview) |
-
----
-
-## 🏗 Architecture & Database
-
-The system follows a Microservices-ready architecture pattern.
-
-### MongoDB Connection
-
-This project uses MongoDB Atlas. Configure your connection string in the `.env` file.
-
-**Connection String:**
-```bash
-mongodb+srv://binhlienminhhuyenthoai_db_user:<db_password>@cluster0.qw9l05j.mongodb.net/?appName=Cluster0
+```plaintext
+src/
+├── components/
+│   ├── ui/             # Core Design System (Button, Card, Toast, Modal)
+│   └── ...
+├── features/           # (Planned) Domain specific logic
+├── layouts/            # MainLayout (Store), AdminLayout (CMS)
+├── pages/
+│   ├── admin/          # Dashboard, Products, Analytics
+│   └── ...             # Shop, ProductDetail, Checkout, Login
+├── services/           # Mock API Service Layer
+├── store/              # Zustand Global Stores (Auth, Cart, UI)
+└── types/              # TypeScript Interfaces
 ```
-
-> **⚠️ Important:** Replace `<db_password>` with your actual database user password. Ensure your IP address is whitelisted in MongoDB Atlas Network Access.
-
-### Data Models
-*   **Users:** Stores authentication, profiles, and RBAC roles.
-*   **Products:** Inventory items with stock management.
-*   **Orders:** Transactional data linking Users and Products.
-*   **AuditLogs:** (Enterprise) Immutable records of system activities.
 
 ---
 
 ## ⚡ Getting Started
 
-### Prerequisites
-*   Node.js (v16 or higher)
-*   npm or yarn
-
-### Installation
-
-1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/your-username/minimal-free-dashboard.git
-    cd minimal-free-dashboard
-    ```
-
-2.  **Install dependencies**
+1.  **Install Dependencies**
     ```bash
     npm install
-    # or
-    yarn install
     ```
 
----
+2.  **Run Development Server**
+    ```bash
+    npm run dev
+    ```
 
-## ⚙️ Environment Configuration
-
-Create a `.env` file in the root directory based on the example below:
-
-```env
-# Server Configuration
-PORT=5000
-NODE_ENV=development
-
-# Database Connection
-# Replace <db_password> with your actual password
-MONGO_URI=mongodb+srv://binhlienminhhuyenthoai_db_user:<db_password>@cluster0.qw9l05j.mongodb.net/?appName=Cluster0
-
-# Security
-JWT_SECRET=your_super_secret_key_change_this
-```
+3.  **Explore the App**
+    *   **Storefront:** [http://localhost:5173](http://localhost:5173)
+    *   **Admin Panel:** [http://localhost:5173/admin](http://localhost:5173/admin)
+    *   *Credentials:* `admin@eflyer.com` / `admin`
 
 ---
 
-## ▶️ Running the Application
+## 🔮 Future Roadmap
 
-### Development Mode
-Runs both client (React) and mock server (if enabled) concurrently.
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to view the client.
-
-### Production Build
-
-```bash
-npm run build
-npm start
-```
-
----
-
-## 📂 Project Structure
-
-```plaintext
-minimal-dashboard/
-├── public/              # Static assets
-├── src/
-│   ├── components/      # Reusable UI components (Card, Button, Drawer)
-│   ├── pages/           # Route components (Dashboard, Products, Login)
-│   ├── services/        # API calls (mockBackend.ts or axios setup)
-│   ├── hooks/           # Custom React hooks (useAuth, useFetch)
-│   ├── types/           # TypeScript interfaces
-│   ├── utils/           # Helper functions
-│   └── App.tsx          # Main entry point & Routing logic
-├── server/              # Backend API (Node/Express)
-│   ├── config/          # DB connection
-│   ├── controllers/     # Route logic
-│   ├── models/          # Mongoose Schemas
-│   └── routes/          # API Endpoints
-├── .env                 # Environment variables
-└── README.md            # Project documentation
-```
-
----
-
-## 🗺 Roadmap
-
-- [x] **v1.0:** Core Dashboard & User Auth.
-- [x] **v2.0:** Enterprise Admin Panel & Role Management.
-- [ ] **v2.5:** Dark Mode Support.
-- [ ] **v3.0:** React Native Mobile App Integration.
-- [ ] **v3.5:** AI-powered Analytics Predictions.
+- [ ] **Backend Integration:** Replace Mock Service with Node.js/NestJS + PostgreSQL.
+- [ ] **Real Payment:** Connect Stripe API keys.
+- [ ] **User Profile:** Order history and address book.
+- [ ] **CMS Content:** Blog and Banner management.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License.

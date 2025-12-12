@@ -3,37 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Enterprise Commerce Admin</title>
+    <title>Enterprise Commerce | Modern Minimal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
+        darkMode: 'class',
         theme: {
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
           },
           extend: {
             colors: {
-              gray: {
-                50: '#F9FAFB',
-                100: '#F3F4F6',
-                200: '#E5E7EB',
-                300: '#D1D5DB',
-                400: '#9CA3AF',
-                500: '#6B7280',
-                600: '#4B5563',
-                700: '#374151',
-                800: '#1F2937',
-                900: '#111827',
-              }
+              border: "hsl(var(--border))",
+              input: "hsl(var(--input))",
+              ring: "hsl(var(--ring))",
+              background: "hsl(var(--background))",
+              foreground: "hsl(var(--foreground))",
+              primary: {
+                DEFAULT: "#111827", // Gray 900
+                foreground: "#ffffff",
+              },
+              secondary: {
+                DEFAULT: "#F3F4F6", // Gray 100
+                foreground: "#111827",
+              },
+              destructive: {
+                DEFAULT: "#ef4444",
+                foreground: "#ffffff",
+              },
+              muted: {
+                DEFAULT: "#F9FAFB",
+                foreground: "#6B7280",
+              },
+              accent: {
+                DEFAULT: "#fcf0d3", // Vintage yellow from original
+                foreground: "#111827",
+              },
             },
             animation: {
               'fade-in': 'fadeIn 0.5s ease-out',
+              'slide-in': 'slideIn 0.3s ease-out',
             },
             keyframes: {
               fadeIn: {
                 '0%': { opacity: '0', transform: 'translateY(10px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              slideIn: {
+                '0%': { transform: 'translateX(100%)' },
+                '100%': { transform: 'translateX(0)' },
               }
             }
           }
@@ -43,16 +62,43 @@
   <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.1",
+    "@/": "./",
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom": "https://esm.sh/react-dom@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react-router-dom": "https://esm.sh/react-router-dom@6.22.3?deps=react@18.2.0,react-dom@18.2.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.358.0?deps=react@18.2.0",
+    "recharts": "https://esm.sh/recharts@2.12.2?deps=react@18.2.0,react-dom@18.2.0",
+    "framer-motion": "https://esm.sh/framer-motion@11.0.8?deps=react@18.2.0,react-dom@18.2.0",
+    "zustand": "https://esm.sh/zustand@4.5.2?deps=react@18.2.0",
+    "clsx": "https://esm.sh/clsx@2.1.0",
+    "tailwind-merge": "https://esm.sh/tailwind-merge@2.2.1",
+    "react-hook-form": "https://esm.sh/react-hook-form@7.51.0?deps=react@18.2.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.1/",
     "react/": "https://esm.sh/react@^19.2.1/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.559.0",
-    "recharts": "https://esm.sh/recharts@^3.5.1"
+    "zustand/": "https://esm.sh/zustand@^5.0.9/",
+    "@react-navigation/native": "https://esm.sh/@react-navigation/native@^7.1.25",
+    "@react-navigation/bottom-tabs": "https://esm.sh/@react-navigation/bottom-tabs@^7.8.12",
+    "react-native": "https://esm.sh/react-native@^0.83.0",
+    "@expo/vector-icons": "https://esm.sh/@expo/vector-icons@^15.0.3",
+    "@react-navigation/stack": "https://esm.sh/@react-navigation/stack@^7.6.12"
   }
 }
 </script>
     <style>
-      body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 222.2 84% 4.9%;
+      }
+      body { 
+        font-family: 'Inter', sans-serif; 
+        -webkit-font-smoothing: antialiased; 
+        background-color: #ffffff;
+        color: #0f172a;
+      }
     </style>
 <link rel="stylesheet" href="/index.css">
 </head>
